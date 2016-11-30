@@ -2,6 +2,7 @@ package no.finn.workshop.javaslang;
 
 import java.util.function.Function;
 
+import javaslang.Function1;
 import javaslang.Function2;
 import javaslang.collection.List;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -14,20 +15,37 @@ public class HigherOrderFunctionsTasks {
     // e.g. call a method that take 3 arguments with only 2 arguments, because they are all you know at the moment.
     // Given a Function2 and its first argument, return the curried and partially applied function
     public static Function<Integer, Integer> applyCurried(Function2<Integer, Integer, Integer> func, Integer firstArgument) {
-        throw new NotImplementedException();
+        /*Function1<Integer, Integer> foo = new Function1<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer integer) {
+                return func.apply(firstArgument, integer);
+            }
+        };*/
+        return (Function1<Integer, Integer>) (i -> func.apply(firstArgument, i));
     }
 
     // Higher Order Functions are when you either return Functions or accept Functions as arguments
     // Function composition F . G with an initial argument (x) is defined as F.apply(G.apply(x))
     // Given a Function of type X -> Y and one Y -> Z use compose to return a Function X -> Z
     public static <X,Y,Z> Function<X,Z> compose(Function<X,Y> first, Function<Y,Z> second) {
-        throw new NotImplementedException();
+        /*Function<X, Z> foo = x -> {
+            second.apply(first.apply(x));
+            //return second.compose(first.apply(x));
+        };*/
+        return second.compose(first);
+        //return (x -> second.apply(first.apply(x)));
     }
 
     // using a javaslang List of Functions of type X -> X, compose them all using a fold
     // what is the zero operator for function composition? (for multiplication it would be 1, for addition it would be 0..)
     public static <X> Function<X,X> composeAll(List<Function<X, X>> functions) {
-        throw new NotImplementedException();
+        Function<X, X> foo = new Function<X, X>() {
+            @Override
+            public X apply(X x) {
+                return x;
+            }
+        };
+        return foo;
     }
 
     // Derive a polynomial function (represented by the PolyFunction class). e.g. : 3.0x^2 + 2.0bx + 1.0 = 0 would be created like this :

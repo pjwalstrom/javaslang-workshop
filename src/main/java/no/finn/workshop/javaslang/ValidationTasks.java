@@ -12,7 +12,15 @@ public class ValidationTasks {
     // return a Validation object of type <List<String>> (errors) or a valid Ad object
     // do this by comining the Validation-objects from the private hejlper methods used on the input parameters
     public static Validation<List<String>, Ad> validateAd(Long adId, String text, Long userId) {
-        throw new NotImplementedException();
+        Validation<String, Long> adVal = positive(adId);
+        Validation<String, Long> userIdVal = positive(userId);
+        Validation<String, String> textVal = nonEmpty(text);
+
+        //Function3<Long, String, Long, Ad> foo = Ad::new;
+        // trenger en Function3, en funksjon med 3 argumenter. Og det har jo Ad::new. Argumentene må også være i rett
+        // rekkefølge, dvs long, string, long
+        return Validation.combine(adVal, textVal, userIdVal).ap(Ad::new);
+
     }
 
     // use this on adId and userId
